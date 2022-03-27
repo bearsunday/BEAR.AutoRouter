@@ -15,6 +15,7 @@ class Actions extends Origin
         string $subNamespace,
         string $tail = ''
     ): ?string {
+        unset($verb);
         $base = rtrim($this->config->namespace, '\\')
             . $subNamespace;
 
