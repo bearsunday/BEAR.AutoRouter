@@ -42,11 +42,12 @@ final class AutoRouter implements RouterInterface
 
         // convert
         $matchUri = str_replace('\\', '/', substr($route->class, strlen($namespace)));
-
+        $arguments = $route->arguments;
+        /** @var array<string, mixed> $arguments */
         return new RouterMatch(
             strtolower($server['REQUEST_METHOD']),
             $this->schemeHost . $matchUri,
-            $route->arguments
+            $arguments
         );
     }
 
