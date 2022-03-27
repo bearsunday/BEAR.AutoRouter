@@ -64,7 +64,7 @@ class Router extends Origin
         $name = $parameter->getName();
 
         while (! empty($this->segments)) {
-            $this->arguments[$parameter->name] = $this->filter->parameter(
+            $this->arguments[] = $this->filter->parameter(
                 $parameter,
                 $this->segments
             );

@@ -8,6 +8,7 @@ use BEAR\AutoRouter\Resource\App\BarItem;
 use BEAR\AutoRouter\Resource\App\FooItem;
 use BEAR\AutoRouter\Resource\App\FooItem\Edit;
 use BEAR\AutoRouter\Resource\App\Index;
+use BEAR\AutoRouter\Resource\App\VarItem;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 
@@ -71,5 +72,14 @@ class AutoRouteTest extends TestCase
         $this->assertSame(Index::class, $route->class);
         $this->assertSame($route->method, 'onGet');
         $this->assertSame([], $route->arguments);
+    }
+
+    public function testVariadicParams(): void
+    {
+        $router = $this->autoRoute->getRouter();
+        $route = $router->route('', '/var-item/1/2/3');
+        $this->assertSame(VarItem::class, $route->class);
+        $this->assertSame($route->method, 'onGet');
+        $this->assertSame([0 => '1', 1 => '2', 2 => '3'], $route->arguments);
     }
 }
