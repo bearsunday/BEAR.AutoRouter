@@ -7,6 +7,7 @@ namespace BEAR\AutoRouter;
 use BEAR\AppMeta\Meta;
 use BEAR\AutoRouter\Resource\App\BarItem;
 use BEAR\AutoRouter\Resource\App\FooItem;
+use BEAR\AutoRouter\Resource\App\Index;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -60,5 +61,17 @@ class AuraDispatcherTest extends TestCase
         $this->assertSame('onget', $invoke->method);
         $this->assertSame(FooItem\Edit::class, $invoke->class);
         $this->assertSame(['id' => 1], $invoke->arguments);
+    }
+
+    public function testIndex(): void
+    {
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => 'http://localhost/',
+        ];
+        $invoke = $this->router->route($server);
+        $this->assertSame('onget', $invoke->method);
+        $this->assertSame(Index::class, $invoke->class);
+        $this->assertSame([], $invoke->arguments);
     }
 }

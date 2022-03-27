@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace BEAR\AutoRouter\Resource\App;
 
-class Index
+use BEAR\Resource\ResourceObject;
+
+class Index extends ResourceObject
 {
-    public function onGet(int $id): static
+    public function onGet(): static
     {
         return $this;
     }
