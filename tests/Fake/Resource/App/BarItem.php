@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\AutoRouter\Resource\App;
 
-class BarItem
+use BEAR\Resource\ResourceObject;
+
+class BarItem extends ResourceObject
 {
     public function onGet(): static
     {

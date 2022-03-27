@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace BEAR\AutoRouter\Resource\App\FooItem;
 
-class Edit
+use BEAR\Resource\ResourceObject;
+
+class Edit  extends ResourceObject
 {
     public function onGet(int $id): static
     {
