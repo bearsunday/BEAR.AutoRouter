@@ -52,6 +52,9 @@ final class AutoRouter implements RouterInterface
         );
     }
 
+    /**
+     * {inheritDoc}
+     */
     public function generate($name, $data)
     {
         return false;
