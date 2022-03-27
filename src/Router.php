@@ -26,25 +26,7 @@ class Router extends Origin
             $subNamespace = $this->subNamespace . '\\' . $segment;
         }
 
-        $this->log("find subnamespace: {$subNamespace}");
-
-        // does the subnamespace exist?
-        if ($this->actions->hasSubNamespace($subNamespace)) {
-            $ns = rtrim($this->config->namespace, '\\') . $subNamespace;
-            $this->log('subnamespace not found');
-
-            // are we are the very top of the url?
-            if ($this->subNamespace === '') {
-                // yes, try to capture arguments for it
-                $this->captureRootClass();
-                return;
-            }
-
-            // no, so no need to keep matching
-            throw new Exception\NotFound("Not a known namespace: {$ns}");
-        }
-
-        $this->log('subnamespace found');
+        $this->log("subnamespace: {$subNamespace}");
         $this->subNamespace = $subNamespace;
         array_shift($this->segments);
         $this->captureMainClass();
