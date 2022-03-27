@@ -21,7 +21,8 @@
     },
     "autoload": {
         "psr-4": {
-            "BEAR\\AutoRouter\\": "src/"
+            "BEAR\\AutoRouter\\": "src/",
+            "BEAR\\Sunday\\": "src-bear-sunday/"
         }
     },
     "autoload-dev": {
