@@ -40,7 +40,7 @@ class AutoRouteTest extends TestCase
         $route = $router->route('', '/foo-item/1');
         $this->assertSame(FooItem::class, $route->class);
         $this->assertSame($route->method, 'onGet');
-        $this->assertSame([1], $route->arguments);
+        $this->assertSame(['id' => 1], $route->arguments);
     }
 
     public function testAutoRouteSubdirectory(): void
@@ -49,7 +49,7 @@ class AutoRouteTest extends TestCase
         $route = $router->route('', '/foo-item/1/edit');
         $this->assertSame(Edit::class, $route->class);
         $this->assertSame($route->method, 'onGet');
-        $this->assertSame([1], $route->arguments);
+        $this->assertSame(['id' => 1], $route->arguments);
     }
 
     public function testAutoRouteSubdirectoryWithAdditnalInvalidParam(): void
@@ -61,7 +61,7 @@ class AutoRouteTest extends TestCase
         // But not suspended.
         $this->assertSame(Edit::class, $route->class);
         $this->assertSame($route->method, 'onGet');
-        $this->assertSame([1], $route->arguments);
+        $this->assertSame(['id' => 1], $route->arguments);
     }
 
     public function testIndex(): void
