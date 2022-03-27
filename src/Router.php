@@ -56,19 +56,4 @@ class Router extends Origin
         $name = $parameter->getName();
         $this->log("captured argument {$i} (\${$name})");
     }
-
-    protected function captureVariadic(
-        ReflectionParameter $parameter,
-        int $i
-    ): void {
-        $name = $parameter->getName();
-
-        while (! empty($this->segments)) {
-            $this->arguments[] = $this->filter->parameter(
-                $parameter,
-                $this->segments
-            );
-            $this->log("captured variadic argument {$i} (\${$name})");
-        }
-    }
 }
