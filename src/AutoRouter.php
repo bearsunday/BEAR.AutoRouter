@@ -53,9 +53,9 @@ final class AutoRouter implements RouterInterface
     }
 
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      */
-    public function generate($name, $data)
+    public function generate($name, $data) // phpcs:ignoreFile
     {
         return false;
     }
