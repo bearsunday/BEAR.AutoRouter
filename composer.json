@@ -10,14 +10,15 @@
     ],
     "require": {
         "php": "^8.0",
-        "pmjones/auto-route": "^2.0",
+        "pmjones/auto-route": "^2.1",
         "bear/app-meta": "^1.7"
     },
     "require-dev": {
         "bear/resource": "1.x-dev",
         "bear/sunday": "1.x-dev",
         "bamarni/composer-bin-plugin": "^1.4",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5.19",
+        "ray/di": "^2.14"
     },
     "autoload": {
         "psr-4": {

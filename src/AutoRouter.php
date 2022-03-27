@@ -43,6 +43,7 @@ final class AutoRouter implements RouterInterface
         // convert
         $matchUri = str_replace('\\', '/', substr($route->class, strlen($namespace)));
         $arguments = $route->arguments;
+
         /** @var array<string, mixed> $arguments */
         return new RouterMatch(
             strtolower($server['REQUEST_METHOD']),
@@ -51,7 +52,10 @@ final class AutoRouter implements RouterInterface
         );
     }
 
-    public function generate($name, $data)
+    /**
+     * {@inheritDoc}
+     */
+    public function generate($name, $data) // phpcs:ignoreFile
     {
         return false;
     }
