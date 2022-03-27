@@ -36,7 +36,7 @@ final class AutoRouter implements RouterInterface
         $namespace = sprintf('%s\\Resource\\%s', $this->appMeta->name, $schema);
         $directory = sprintf('%s/Resource/%s/', $this->appMeta->appDir, $schema);
         $uri = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
-        if (substr($uri, -1, 1) === '/') {
+        if (str_ends_with($uri, '/')) {
             $uri .= '/index';
         }
         $autoRoute = new AutoRoute($namespace, $directory, method: $method);
