@@ -6,6 +6,7 @@ namespace BEAR\AutoRouter;
 
 use BEAR\AppMeta\AbstractAppMeta;
 use BEAR\Resource\ResourceObject;
+use BEAR\Resource\Uri;
 use BEAR\Sunday\Annotation\DefaultSchemeHost;
 use BEAR\Sunday\DispatcherInterface;
 use BEAR\Sunday\ResourceInvocation;
@@ -15,6 +16,7 @@ use function assert;
 use function class_exists;
 use function parse_url;
 use function sprintf;
+use function str_ends_with;
 use function strtolower;
 use function substr;
 
@@ -39,7 +41,7 @@ final class AutoDispatchr implements DispatcherInterface
         $namespace = sprintf('%s\\Resource\\%s', $this->appMeta->name, $schema);
         $directory = sprintf('%s/Resource/%s/', $this->appMeta->appDir, $schema);
         $uri = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
-        if (substr($uri, -1, 1) === '/') {
+        if (str_ends_with($uri, '/')) {
             $uri .= 'index';
         }
 
@@ -49,6 +51,8 @@ final class AutoDispatchr implements DispatcherInterface
         assert(class_exists($route->class));
         $ro = $this->injector->getInstance($route->class);
         assert($ro instanceof ResourceObject);
+        $uri = sprintf('%s%s', $this->schemeHost, strtolower($uri));
+        $ro->uri = new Uri($uri);
 
         return new ResourceInvocation($ro, $route->method, $route->class, $route->arguments);
     }
