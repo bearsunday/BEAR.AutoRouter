@@ -1,4 +1,4 @@
-# b-e-a-r/auto-router
+# bear/auto-router
 
 ## Installation
 
