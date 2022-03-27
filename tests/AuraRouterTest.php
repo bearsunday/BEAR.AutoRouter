@@ -49,4 +49,20 @@ class AuraRouterTest extends TestCase
         $this->assertSame('app://self/FooItem', $request->path);
         $this->assertSame(['id' => 1], $request->query);
     }
+
+    public function testAutoRouteSubdirectory(): void
+    {
+        $globals = [
+            '_GET' => [],
+            '_POST' => [],
+        ];
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => 'http://localhost/foo-item/1/edit',
+        ];
+        $request = $this->router->match($globals, $server);
+        $this->assertSame('get', $request->method);
+        $this->assertSame('app://self/FooItem/Edit', $request->path);
+        $this->assertSame(['id' => 1], $request->query);
+    }
 }
