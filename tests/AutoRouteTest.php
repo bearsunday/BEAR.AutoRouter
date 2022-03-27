@@ -11,7 +11,7 @@ use BEAR\AutoRouter\Resource\App\Index;
 use PHPUnit\Framework\TestCase;
 use UnexpectedValueException;
 
-class AutoRouterTest extends TestCase
+class AutoRouteTest extends TestCase
 {
     protected AutoRoute $autoRoute;
 
