@@ -9,6 +9,14 @@ use BEAR\Sunday\Extension\Router\RouterInterface;
 use Ray\Di\AbstractModule;
 use Ray\Di\Scope;
 
+/**
+ * Provides RouterInterface and derived bindings
+ *
+ * The following bindings are provided:
+ *
+ *  RouterInterface
+ *  DispatcherInterface
+ */
 class AutoRouteModule extends AbstractModule
 {
     public function __construct(?AbstractModule $module = null)
