@@ -31,11 +31,11 @@ final class AutoRouter implements RouterInterface
      */
     public function match(array $globals, array $server)
     {
-        $method = 'on' . $server['REQUEST_METHOD'];
+        $method = strtolower('on' . $server['REQUEST_METHOD']);
         $schema = substr($this->schemeHost, 0, 3) === 'app' ? 'App' : 'Page';
         $namespace = sprintf('%s\\Resource\\%s', $this->appMeta->name, $schema);
         $directory = sprintf('%s/Resource/%s/', $this->appMeta->appDir, $schema);
-        $uri = parse_url($server['REQUEST_URI'], PHP_URL_PATH);
+        $uri = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
         $autoRoute = new AutoRoute($namespace, $directory, method: $method);
         $router = $autoRoute->getRouter();
         $route = $router->route('', $uri);
@@ -52,6 +52,6 @@ final class AutoRouter implements RouterInterface
 
     public function generate($name, $data)
     {
-        // TODO: Implement generate() method.
+        return false;
     }
 }
