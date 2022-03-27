@@ -6,9 +6,9 @@ namespace BEAR\AutoRouter\Resource\App;
 
 use BEAR\Resource\ResourceObject;
 
-class Index extends ResourceObject
+class VarItem extends ResourceObject
 {
-    public function onGet(): static
+    public function onGet(...$args): static
     {
         return $this;
     }

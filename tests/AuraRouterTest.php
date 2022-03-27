@@ -30,7 +30,7 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/BarItem', $request->path);
+        $this->assertSame('app://self/baritem', $request->path);
         $this->assertSame([], $request->query);
     }
 
@@ -46,7 +46,7 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/FooItem', $request->path);
+        $this->assertSame('app://self/fooitem', $request->path);
         $this->assertSame(['id' => 1], $request->query);
     }
 
@@ -62,7 +62,23 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/FooItem/Edit', $request->path);
+        $this->assertSame('app://self/fooitem/edit', $request->path);
         $this->assertSame(['id' => 1], $request->query);
+    }
+
+    public function testIndex(): void
+    {
+        $globals = [
+            '_GET' => [],
+            '_POST' => [],
+        ];
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => 'http://localhost/',
+        ];
+        $request = $this->router->match($globals, $server);
+        $this->assertSame('get', $request->method);
+        $this->assertSame('app://self/index', $request->path);
+        $this->assertSame([], $request->query);
     }
 }

@@ -39,6 +39,10 @@ final class AutoDispatchr implements DispatcherInterface
         $namespace = sprintf('%s\\Resource\\%s', $this->appMeta->name, $schema);
         $directory = sprintf('%s/Resource/%s/', $this->appMeta->appDir, $schema);
         $uri = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
+        if (substr($uri, -1, 1) === '/') {
+            $uri .= 'index';
+        }
+
         $autoRoute = new AutoRoute($namespace, $directory, method: $method);
         $router = $autoRoute->getRouter();
         $route = $router->route('', $uri);
