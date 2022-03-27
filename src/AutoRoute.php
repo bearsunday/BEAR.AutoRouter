@@ -1,9 +1,5 @@
 <?php
 
-/**
- * This file is part of AutoRoute for PHP.
- */
-
 declare(strict_types=1);
 
 namespace BEAR\AutoRouter;
