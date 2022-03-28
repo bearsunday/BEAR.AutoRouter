@@ -6,6 +6,7 @@ namespace BEAR\AutoRouter;
 
 use BEAR\AppMeta\AbstractAppMeta;
 use BEAR\AppMeta\Meta;
+use BEAR\Resource\Module\ResourceModule;
 use BEAR\Sunday\Annotation\DefaultSchemeHost;
 use BEAR\Sunday\DispatcherInterface;
 use BEAR\Sunday\Extension\Router\RouterInterface;
@@ -20,10 +21,10 @@ class AutoRouteModuleTest extends TestCase
         $injector = (new Injector(new class extends AbstractModule{
             protected function configure()
             {
-                $this->bind(AbstractAppMeta::class)->toInstance(
-                    new Meta('BEAR\AutoRouter', 'app', __DIR__ . '/Fake')
-                );
+                $meta = new Meta('BEAR\AutoRouter', 'app', __DIR__ . '/Fake');
+                $this->bind(AbstractAppMeta::class)->toInstance($meta);
                 $this->bind()->annotatedWith(DefaultSchemeHost::class)->toInstance('app::self/');
+                $this->install(new ResourceModule($meta->appDir));
                 $this->install(new AutoRouteModule());
             }
         }));

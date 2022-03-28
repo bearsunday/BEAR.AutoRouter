@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace BEAR\AutoRouter;
 
 use BEAR\AppMeta\Meta;
-use BEAR\AutoRouter\Resource\App\BarItem;
 use BEAR\AutoRouter\Resource\App\FooItem;
-use BEAR\AutoRouter\Resource\App\Index;
+use BEAR\Resource\InvokerInterface;
 use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
@@ -21,7 +20,8 @@ class AuraDispatcherTest extends TestCase
     {
         $injector = new Injector(new ResourceModule('BEAR\AutoRouter'));
         $meta = new Meta('BEAR\AutoRouter', 'app', __DIR__ . '/Fake');
-        $this->router = new AutoDispatchr($injector, $meta, 'app://self');
+        $invoker = $injector->getInstance(InvokerInterface::class);
+        $this->router = new AutoDispatchr($injector, $meta, 'app://self', $invoker);
     }
 
     public function testRoute(): void
@@ -30,10 +30,8 @@ class AuraDispatcherTest extends TestCase
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => 'http://localhost/bar-item',
         ];
-        $invoke = $this->router->route($server);
-        $this->assertSame('onget', $invoke->method);
-        $this->assertSame(BarItem::class, $invoke->class);
-        $this->assertSame([], $invoke->arguments);
+        $request = $this->router->route($server);
+        $this->assertSame('app://self/baritem', $request->toUri());
     }
 
     public function testRouteWithParam(): void
@@ -42,11 +40,9 @@ class AuraDispatcherTest extends TestCase
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => 'http://localhost/foo-item/1',
         ];
-        $invoke = $this->router->route($server);
-        $this->assertSame('onget', $invoke->method);
-        $this->assertSame(FooItem::class, $invoke->class);
-        $this->assertSame(['id' => 1], $invoke->arguments);
-        $ro = $invoke();
+        $request = $this->router->route($server);
+        $this->assertSame('get app://self/fooitem?id=1', $request->toUriWithMethod());
+        $ro = $request();
         $this->assertInstanceOf(FooItem::class, $ro);
         $this->assertInstanceOf(FooItem::class, $ro);
     }
@@ -57,10 +53,8 @@ class AuraDispatcherTest extends TestCase
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => 'http://localhost/foo-item/1/edit',
         ];
-        $invoke = $this->router->route($server);
-        $this->assertSame('onget', $invoke->method);
-        $this->assertSame(FooItem\Edit::class, $invoke->class);
-        $this->assertSame(['id' => 1], $invoke->arguments);
+        $request = $this->router->route($server);
+        $this->assertSame('get app://self/fooitem/edit?id=1', $request->toUriWithMethod());
     }
 
     public function testIndex(): void
@@ -69,9 +63,7 @@ class AuraDispatcherTest extends TestCase
             'REQUEST_METHOD' => 'GET',
             'REQUEST_URI' => 'http://localhost/',
         ];
-        $invoke = $this->router->route($server);
-        $this->assertSame('onget', $invoke->method);
-        $this->assertSame(Index::class, $invoke->class);
-        $this->assertSame([], $invoke->arguments);
+        $request = $this->router->route($server);
+        $this->assertSame('get app://self/index', $request->toUriWithMethod());
     }
 }

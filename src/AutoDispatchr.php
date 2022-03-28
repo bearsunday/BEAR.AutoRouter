@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace BEAR\AutoRouter;
 
 use BEAR\AppMeta\AbstractAppMeta;
+use BEAR\Resource\InvokerInterface;
+use BEAR\Resource\Request;
 use BEAR\Resource\ResourceObject;
 use BEAR\Resource\Uri;
 use BEAR\Sunday\Annotation\DefaultSchemeHost;
 use BEAR\Sunday\DispatcherInterface;
-use BEAR\Sunday\ResourceInvocation;
 use Ray\Di\InjectorInterface;
 
 use function assert;
@@ -17,6 +18,8 @@ use function class_exists;
 use function parse_url;
 use function sprintf;
 use function str_ends_with;
+use function str_replace;
+use function strlen;
 use function strtolower;
 use function substr;
 
@@ -27,14 +30,15 @@ final class AutoDispatchr implements DispatcherInterface
     public function __construct(
         private InjectorInterface $injector,
         private AbstractAppMeta $appMeta,
-        #[DefaultSchemeHost] private string $schemeHost
+        #[DefaultSchemeHost] private string $schemeHost,
+        private InvokerInterface $invoker
     ) {
     }
 
     /**
      * {@inheritDoc}
      */
-    public function route(array $server): ResourceInvocation
+    public function route(array $server): Request
     {
         $method = strtolower('on' . $server['REQUEST_METHOD']);
         $schema = substr($this->schemeHost, 0, 3) === 'app' ? 'App' : 'Page';
@@ -49,11 +53,12 @@ final class AutoDispatchr implements DispatcherInterface
         $router = $autoRoute->getRouter();
         $route = $router->route('', $uri);
         assert(class_exists($route->class));
-        $ro = $this->injector->getInstance($route->class);
-        assert($ro instanceof ResourceObject);
-        $uri = sprintf('%s%s', $this->schemeHost, strtolower($uri));
-        $ro->uri = new Uri($uri);
+        $matchUri = str_replace('\\', '/', substr($route->class, strlen($namespace)));
 
-        return new ResourceInvocation($ro, $route->method, $route->class, $route->arguments);
+        $ro = $this->injector->getInstance($route->class);
+        $ro->uri = new Uri($this->schemeHost . strtolower($matchUri));
+        assert($ro instanceof ResourceObject);
+
+        return new Request($this->invoker, $ro, strtolower($server['REQUEST_METHOD']), $route->arguments);
     }
 }
