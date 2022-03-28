@@ -11,6 +11,8 @@ use BEAR\Resource\Module\ResourceModule;
 use PHPUnit\Framework\TestCase;
 use Ray\Di\Injector;
 
+use function assert;
+
 class AuraDispatcherTest extends TestCase
 {
     /** @var AutoDispatchr */
@@ -21,6 +23,7 @@ class AuraDispatcherTest extends TestCase
         $injector = new Injector(new ResourceModule('BEAR\AutoRouter'));
         $meta = new Meta('BEAR\AutoRouter', 'app', __DIR__ . '/Fake');
         $invoker = $injector->getInstance(InvokerInterface::class);
+        assert($invoker instanceof InvokerInterface);
         $this->router = new AutoDispatchr($injector, $meta, 'app://self', $invoker);
     }
 

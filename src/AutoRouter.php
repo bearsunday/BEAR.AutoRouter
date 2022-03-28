@@ -35,22 +35,24 @@ final class AutoRouter implements RouterInterface
         $schema = substr($this->schemeHost, 0, 3) === 'app' ? 'App' : 'Page';
         $namespace = sprintf('%s\\Resource\\%s', $this->appMeta->name, $schema);
         $directory = sprintf('%s/Resource/%s/', $this->appMeta->appDir, $schema);
-        $uri = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
-        if (str_ends_with($uri, '/')) {
-            $uri .= '/index';
+        $path = (string) parse_url($server['REQUEST_URI'], PHP_URL_PATH);
+        if (str_ends_with($path, '/')) {
+            $path .= '/index';
         }
         $autoRoute = new AutoRoute($namespace, $directory, method: $method);
         $router = $autoRoute->getRouter();
-        $route = $router->route('', $uri);
+        $route = $router->route('', $path);
 
         // convert
-        $matchUri = str_replace('\\', '/', substr($route->class, strlen($namespace)));
+        $path = $route->error ?
+            $path :
+            strtolower(str_replace('\\', '/', substr($route->class, strlen($namespace))));
         $arguments = $route->arguments;
 
         /** @var array<string, mixed> $arguments */
         return new RouterMatch(
             strtolower($server['REQUEST_METHOD']),
-            $this->schemeHost . strtolower($matchUri),
+            $path,
             $arguments
         );
     }

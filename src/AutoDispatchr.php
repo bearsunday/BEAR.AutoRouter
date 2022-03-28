@@ -56,9 +56,10 @@ final class AutoDispatchr implements DispatcherInterface
         $matchUri = str_replace('\\', '/', substr($route->class, strlen($namespace)));
 
         $ro = $this->injector->getInstance($route->class);
-        $ro->uri = new Uri($this->schemeHost . strtolower($matchUri));
+        $ro->uri = new Uri($this->schemeHost . strtolower($matchUri)); // @phpstan-ignore-line
         assert($ro instanceof ResourceObject);
 
+        /** @psalm-suppress MixedArgumentTypeCoercion */
         return new Request($this->invoker, $ro, strtolower($server['REQUEST_METHOD']), $route->arguments);
     }
 }

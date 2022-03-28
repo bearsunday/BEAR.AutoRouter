@@ -30,7 +30,7 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/baritem', $request->path);
+        $this->assertSame('/baritem', $request->path);
         $this->assertSame([], $request->query);
     }
 
@@ -46,7 +46,7 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/fooitem', $request->path);
+        $this->assertSame('/fooitem', $request->path);
         $this->assertSame(['id' => 1], $request->query);
     }
 
@@ -62,7 +62,7 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/fooitem/edit', $request->path);
+        $this->assertSame('/fooitem/edit', $request->path);
         $this->assertSame(['id' => 1], $request->query);
     }
 
@@ -78,7 +78,22 @@ class AuraRouterTest extends TestCase
         ];
         $request = $this->router->match($globals, $server);
         $this->assertSame('get', $request->method);
-        $this->assertSame('app://self/index', $request->path);
+        $this->assertSame('/index', $request->path);
         $this->assertSame([], $request->query);
+    }
+
+    public function testNotFound(): void
+    {
+        $globals = [
+            '_GET' => [],
+            '_POST' => [],
+        ];
+        $server = [
+            'REQUEST_METHOD' => 'GET',
+            'REQUEST_URI' => 'http://localhost/__not_found__',
+        ];
+        $request = $this->router->match($globals, $server);
+        $this->assertSame('/__not_found__', $request->path);
+        $this->assertSame('get /__not_found__', $request->__toString());
     }
 }

@@ -8,7 +8,7 @@ use BEAR\Resource\ResourceObject;
 
 class VarItem extends ResourceObject
 {
-    public function onGet(...$args): static
+    public function onGet(string ...$args): static
     {
         return $this;
     }
